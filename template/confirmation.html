@@ -1,0 +1,464 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Worknex</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/confirmation.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+    <style>
+        /* SECTION */
+.worker-section{
+margin-top:40px;
+padding:20px 0;
+max-width:1200px;
+margin-left:auto;
+margin-right:auto;
+}
+
+/* Title */
+.section-title{
+font-size:24px;
+font-weight:600;
+margin-bottom:20px;
+color:#000;
+}
+
+/* Worker Card */
+.worker-card{
+display:flex;
+align-items:center;
+gap:25px;
+background:#fff;
+padding:20px;
+border-radius:10px;
+border:1px solid #e5e5e5;
+box-shadow:0 4px 12px rgba(0,0,0,0.06);
+transition:all 0.3s ease;
+width:100%;
+}
+
+/* Hover */
+.worker-card:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Worker Photo */
+.worker-photo{
+flex-shrink:0;
+}
+
+/* .photo-placeholder{
+width:70px;
+height:70px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #f0f0f0;
+} */
+
+/* Worker Info */
+.worker-info{
+flex:1;
+}
+
+.worker-name{
+font-size:18px;
+font-weight:600;
+margin-bottom:6px;
+color:#000;
+}
+
+.worker-detail{
+font-size:14px;
+color:#555;
+margin-bottom:3px;
+}
+
+.detail-label{
+font-weight:600;
+color:#000;
+}
+
+/* ACTION BUTTONS */
+.worker-actions{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+
+/* Button */
+.action-btn{
+background:#fff;
+color:#000;
+border:1px solid #ddd;
+padding:8px 14px;
+border-radius:6px;
+font-size:13px;
+text-decoration:none;
+cursor:pointer;
+transition:all 0.25s ease;
+}
+
+/* Hover */
+.action-btn:hover{
+background:#000;
+color:#fff;
+}
+
+/* Invoice text */
+.invoice-text{
+font-size:13px;
+color:#777;
+}
+
+.status-tracker-section{
+margin-top:40px;
+}
+
+.progress-tracker{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+margin-top:25px;
+flex-wrap:nowrap;
+}
+
+.progress-step{
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+min-width:90px;
+}
+.step-circle{
+width:40px;
+height:40px;
+border-radius:50%;
+background:#e0e0e0;
+color:#555;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+}
+
+.step-label{
+margin-top:6px;
+font-size:13px;
+color:#666;
+white-space:nowrap;
+}
+
+
+/* Completed */
+.progress-step.completed .step-circle{
+background:#000;
+color:#fff;
+}
+
+.progress-line{
+width:60px;
+height:3px;
+background:#e0e0e0;
+}
+
+
+.progress-line.completed{
+background:#000;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+.worker-card{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.worker-actions{
+width:100%;
+}
+
+.action-btn{
+width:100%;
+text-align:center;
+}
+.progress-tracker{
+display:flex;
+align-items:center;
+justify-content:space-between;
+flex-wrap:nowrap;   /* ye important fix hai */
+overflow-x:auto;    /* agar space kam ho to scroll aa jayega */
+}
+
+.progress-step{
+min-width:80px;
+}
+}
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+     {% include "nav.html" %}
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        <!-- SUCCESS SECTION -->
+        <section class="success-section fade-in">
+            <div class="checkmark-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h1 class="success-heading">Booking Confirmed!</h1>
+            <p class="success-subtext">Your service request has been successfully submitted.</p>
+            
+            <div class="booking-info">
+                <div class="info-card">
+                    <span class="info-label">Booking ID</span>
+                    <span class="info-value" id="bookingId">BK-{{ booking.id|stringformat:"04d" }}</span>
+                </div>
+                <div class="info-card">
+                    <span class="info-label">Service Name</span>
+                    <span class="info-value">{{ booking.service.name }}</span>
+                </div>
+                <div class="info-card">
+                    <span class="info-label">Scheduled Date & Time</span>
+                    <span class="info-value">{{ booking.preferred_date }} - {{ booking.preferred_time }}</span>
+                </div>
+                <div class="info-card">
+                    <span class="info-label">Minimum Cost</span>
+                    <span class="info-value">₹{{ booking.minimum_cost }}</span>
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- STATUS TRACKER -->
+        <section class="status-tracker-section fade-in">
+            <h2 class="section-title">Booking Status</h2>
+                
+            <div class="progress-tracker">
+                
+                <div class="progress-step {% if booking.status == 'requested' or booking.status == 'assigned' or booking.status == 'on_the_way' or booking.status == 'completed' %}completed{% endif %}">
+                    <div class="step-circle">1</div>
+                    <p class="step-label">Request Sent</p>
+                </div>
+                <div class="progress-line  {% if booking.status != 'requested' %}completed{% endif %}"></div>
+                <div class="progress-step {% if booking.status == 'assigned' or booking.status == 'on_the_way' or booking.status == 'completed' %}completed{% endif %}
+            {% if booking.status == 'assigned' %}active{% endif %}">
+                    <div class="step-circle">2</div>
+                    <p class="step-label">Worker Assigned</p>
+                </div>
+                <div class="progress-line  {% if booking.status == 'on_the_way' or booking.status == 'completed' %}completed{% endif %} "></div>
+                <div class="progress-step   {% if booking.status == 'on_the_way' or booking.status == 'completed' %}completed{% endif %}
+            {% if booking.status == 'on_the_way' %}active{% endif %}">
+                    <div class="step-circle">3</div>
+                    <p class="step-label">On The Way</p>
+                </div>
+                <div class="progress-line{% if booking.status == 'completed' %}completed{% endif %}"></div>
+                <div class="progress-step  {% if booking.status == 'completed' %}completed active{% endif %}">
+                    <div class="step-circle">4</div>
+                    <p class="step-label">Job Completed</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORKER DETAILS -->
+        <section class="worker-section fade-in">
+            <h2 class="section-title">Assigned Worker</h2>
+             {% if booking.assigned_worker %}
+            <div class="worker-card">
+                <div class="worker-photo">
+                    {% comment %} <div class="photo-placeholder"> {{ booking.assigned_worker.user.username|slice:":1"|upper }}</div> {% endcomment %}
+                    {% if booking.assigned_worker.workerprofile.photo %}
+    <img class="photo-placeholder" src="{{ booking.assigned_worker.workerprofile.photo.url }}" width="150">
+{% endif %}
+                </div>
+                <div class="worker-info">
+                    <h3 class="worker-name"> {{ booking.assigned_worker.user.username }}</h3>
+                    <p class="worker-detail"><span class="detail-label">Experience:</span> {{ booking.assigned_worker.workerprofile.experience }} years</p>
+                    {% comment %} <p class="worker-detail"><span class="detail-label">Rating:</span> <span class="rating">4.5 ★</span></p> {% endcomment %}
+                    <p class="worker-detail"><span class="detail-label">Mobile:</span> {{ booking.assigned_worker.phone_number }}</p>
+                    <p class="worker-detail"><span class="detail-label">Service:</span> {{ booking.service.name }}</p>
+                </div>
+                <div class="worker-actions">
+
+<a href="tel:{{ booking.assigned_worker.mobile }}" class="action-btn">
+Call Worker
+</a>
+
+<a href="{% url 'chat' booking.id %}" class="action-btn">
+Chat with Worker
+</a>
+
+<button class="action-btn">
+Track Worker
+</button>
+
+{% if bill %}
+<a href="{% url 'invoice' booking.id %}" class="action-btn">
+Download Invoice
+</a>
+{% else %}
+<p class="invoice-text">Invoice not generated yet</p>
+{% endif %}
+
+</div>
+            </div>
+             {% else %}
+        <p style="text-align:center; margin-top:20px;">
+            Worker not assigned yet. Please wait...
+        </p>
+    {% endif %}
+
+        </section>
+       
+        <!-- BILLING & PAYMENT -->
+        <section class="billing-section fade-in">
+            <h2 class="section-title">Payment Details</h2>
+            {% comment %} <div class="billing-card">
+                <div class="billing-row">
+                    <span class="billing-label">Service Charge</span>
+                    <span class="billing-value">{{ booking.minimum_cost }}</span>
+                </div>
+                {% comment %} <div class="billing-row">
+                    <span class="billing-label">Parts Charge</span>
+                    <span class="billing-value">₹0</span>
+                </div>
+                <div class="billing-divider"></div>
+                <div class="billing-row total">
+                    <span class="billing-label">Total Amount</span>
+                    <span class="billing-value">₹499</span>
+                </div> {% endcomment %}
+                {% if booking.bill %}
+    <div class="billing-row">
+        <span class="billing-label">Service Charge</span>
+        <span class="billing-value">₹{{ booking.bill.service_charge }}</span>
+    </div>
+
+    <div class="billing-row">
+        <span class="billing-label">Parts Charge</span>
+        <span class="billing-value">₹{{ booking.bill.parts_cost }}</span>
+    </div>
+
+    <div class="billing-divider"></div>
+
+    <div class="billing-row total">
+        <span class="billing-label">Total Amount</span>
+        <span class="billing-value">₹{{ booking.bill.total_amount }}</span>
+    </div>
+{% else %}
+    <div class="billing-row">
+        <span class="billing-label">Minimum Cost</span>
+        <span class="billing-value">₹{{ booking.minimum_cost }}</span>
+    </div>
+{% endif %}
+                <div class="payment-options"> 
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="online" checked>
+                        <span>Pay Online</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="cash">
+                        <span>Pay Cash</span>
+                    </label>
+                </div>
+            
+    
+    <button type="submit" class="btn btn-primary">
+        Proceed to Payment
+    </button>
+
+                {% comment %} <button class="btn btn-primary" id="payBtn">Proceed to Payment</button> {% endcomment %}
+                {% comment %} <!-- {% if booking.status == "completed" %}
+    <a href="{% url 'generate_bill_pdf' booking.id %}" 
+       class="btn btn-primary" 
+       style="margin-top:15px;">
+        Download Invoice (PDF)
+    </a>
+{% endif %} --> {% endcomment %}
+            </div>
+        </section>
+
+        <!-- CANCEL BOOKING -->
+        <section class="cancel-section fade-in">
+            <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-cancel">
+        Cancel Booking
+    </button>
+</form>
+            {% comment %} <button class="btn btn-cancel" id="cancelBtn">Cancel Booking</button> {% endcomment %}
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Services</a>
+                <a href="#">Parts</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="footer-copyright">© 2026 Worknex. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- PAYMENT SUCCESS POPUP -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <h3 class="modal-title">Payment Successful!</h3>
+            <p class="modal-message">Your payment has been processed successfully.</p>
+            <button class="btn btn-primary" onclick="closePaymentModal()">Done</button>
+        </div>
+    </div>
+
+    <!-- CANCEL CONFIRMATION POPUP -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Cancel Booking?</h3>
+            <p class="modal-message">Are you sure you want to cancel this booking?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeCancelModal()">No, Keep It</button>
+                <button class="btn btn-danger" onclick="confirmCancel()">Yes, Cancel Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRACK WORKER MODAL -->
+    <div class="modal" id="trackModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeTrackModal()">×</span>
+            <h3 class="modal-title">Track Worker</h3>
+            <div class="track-info">
+                <p class="tracking-status">John Davis is <strong>5 minutes away</strong></p>
+                <div class="map-placeholder">📍 Map View Coming Soon</div>
+                <div class="eta-info">
+                    <p><strong>Estimated Arrival:</strong> 2:05 PM</p>
+                    <p><strong>Current Location:</strong> 2.3 km away</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{%static 'assets/js/confirmation.js'%}"></script>
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>

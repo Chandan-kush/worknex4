@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worknex - Sign In / Sign Up</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'assets/css/signin.css'%}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Logo -->
+            <div class="logo">WORKNEX</div>
+
+            <!-- Toggle Buttons -->
+            <div class="toggle-container">
+                <button class="toggle-btn active" data-form="signin">Sign In</button>
+                <button class="toggle-btn" data-form="signup">Sign Up</button>
+            </div>
+
+            <!-- Forms Container -->
+            <div class="forms-container">
+                <!-- Sign In Form -->
+                <form method="POST" action="{% url 'signin' %}" class="form active" id="signin-form">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="signin-mobile">Mobile Number</label>
+                        <input 
+                            type="tel" 
+                            id="signin-mobile" 
+                            placeholder="Enter your 10-digit mobile number"
+                            maxlength="10"
+                            name="phone"
+                            required
+                        >
+                        <span class="error-message" id="signin-mobile-error"></span>
+                    </div>
+
+                    {% comment %} <button type="button" class="btn btn-primary" id="send-otp-btn">Send OTP</button>
+
+                    <div class="form-group" id="otp-field-container" style="display: none;">
+                        <label for="signin-otp">Enter OTP</label>
+                        <input 
+                            type="text" 
+                            id="signin-otp" 
+                            placeholder="Enter 4-digit OTP"
+                            maxlength="4"
+                        >
+                        <span class="error-message" id="signin-otp-error"></span>
+                    </div> {% endcomment %}
+
+                    <button type="submit" class="btn btn-primary" id="verify-login-btn" style="display: none;">Verify & Login</button>
+                </form>
+
+                <!-- Sign Up Form -->
+               <form method="POST" action="{% url 'signup' %}" class="form" enctype="multipart/form-data" id="signup-form">
+                          {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="signup-name" 
+                            placeholder="Enter your full name"
+                            name="full_name"
+                            required
+                        >
+                        <span class="error-message" id="signup-name-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-mobile">Mobile Number</label>
+                        <input 
+                            type="tel" 
+                            id="signup-mobile" 
+                            placeholder="Enter your 10-digit mobile number"
+                            maxlength="10"
+                            name="phone"
+                            required
+                        >
+                        <span class="error-message" id="signup-mobile-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input 
+                            type="email" 
+                            id="signup-email" 
+                            placeholder="Enter your email address"
+                            name="email"
+                            required
+                        >
+                        <span class="error-message" id="signup-email-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-role">Role</label>
+                        <select id="signup-role" name="role">
+                            <option value="">Select your role</option>
+                            <option value="user">User</option>
+                            <option value="worker">Worker</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <span class="error-message" id="signup-role-error"></span>
+                    </div>
+
+                    <!-- User Role Fields (always show) -->
+                     <div id="user-fields" style="display: none;">
+                        <p class="field-label">User registration requires OTP verification.</p>
+                    </div> 
+
+                    <!-- Worker Role Fields -->
+                    <div id="worker-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="worker-experience">Experience (Years)</label>
+                            <input 
+                                type="number" 
+                                id="worker-experience" 
+                                placeholder="Enter years of experience"
+                                min="0"
+                                name="experience"
+                            >
+                            <span class="error-message" id="worker-experience-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="worker-service">Service Type</label>
+                            <select id="worker-service" name="service_type">
+                                <option value="">Select service type</option>
+                                 {% for service in services %}
+            <option value="{{ service.id }}">
+                {{ service.name }}
+            </option>
+        {% endfor %}
+                                {% comment %} <option value="electrician">Electrician</option>
+                                <option value="plumber">Plumber</option>
+                                <option value="carpenter">Carpenter</option>
+                                <option value="painter">Painter</option>
+                                <option value="mechanic">Mechanic</option>
+                                <option value="other">Other</option> {% endcomment %}
+                            </select>
+                            <span class="error-message" id="worker-service-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="worker-location">Location</label>
+                            <input 
+                                type="text" 
+                                id="worker-location" 
+                                placeholder="Enter your location/city"
+                                name="location"
+                            >
+                            <span class="error-message" id="worker-location-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="worker-address">Address</label>
+                            <textarea 
+                                id="worker-address" 
+                                placeholder="Enter your full address"
+                                rows="3"
+                                name="address"
+                            ></textarea>
+                            <span class="error-message" id="worker-address-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="worker-photo">Upload Photo</label>
+                            <input 
+                                type="file" 
+                                id="worker-photo"
+                                accept="image/*"
+                                name="photo"
+                            >
+                            <span class="error-message" id="worker-photo-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="worker-id">Upload ID Proof</label>
+                            <input 
+                                type="file" 
+                                id="worker-id"
+                                accept="image/*,.pdf"
+                                name="id_proof"
+                            >
+                            <span class="error-message" id="worker-id-error"></span>
+                        </div>
+                    </div>
+
+                    <!-- Admin Role Fields -->
+                    <div id="admin-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="admin-secret">Admin Secret Key</label>
+                            <input 
+                                type="password" 
+                                id="admin-secret" 
+                                placeholder="Enter admin secret key"
+                            >
+                            <span class="error-message" id="admin-secret-error"></span>
+                        </div>
+                    </div>
+
+                     <!-- OTP Field for Sign Up -->
+                    <div id="signup-otp-container" style="display: none;">
+                        <div class="form-group">
+                            <label for="signup-otp">Enter OTP</label>
+                            <input 
+                                type="text" 
+                                id="signup-otp" 
+                                placeholder="Enter 4-digit OTP"
+                                maxlength="4"
+                            >
+                            <span class="error-message" id="signup-otp-error"></span>
+                        </div>
+                    </div> 
+
+                     <button type="button" class="btn btn-primary" id="signup-send-otp-btn" style="display: none;">Send OTP</button> 
+                    <button type="submit" class="btn btn-primary" id="signup-submit-btn">Sign Up</button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="success-message" class="success-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="{%static 'assets/js/signin.js'%}"></script>
+</body>
+</html>

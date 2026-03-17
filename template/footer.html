@@ -1,0 +1,37 @@
+ <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>About WORKNEX</h4>
+                <p>WORKNEX connects you with verified professionals for all your home service needs. We're committed to making home services accessible and affordable.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Services</h4>
+                
+                <ul>
+                    <ul>
+{% for service in services|slice:":4" %}
+    <li><a href="#services">{{ service.name }}</a></li>
+{% endfor %}
+</ul>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url "home" %}">Home</a></li>
+                    <li><a href="{% url "services" %}">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="{% url "signin" %}">Sign In</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact Info</h4>
+                <p>Email: Worknex@gmail.com</p>
+                <p>Phone: +91 6263812413</p>
+                <p>Address: Indore</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 WORKNEX. All rights reserved.</p>
+        </div>
+    </footer>

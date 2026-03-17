@@ -1,0 +1,384 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worknex - Service Booking</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/book.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+     <link rel="stylesheet" href="{%static 'assets/css/services.css'%}">
+    <style>
+       .workers-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 280px);
+    justify-content: center;
+    gap: 30px;
+}
+
+.worker-card{
+    width: 280px;
+    background-color: var(--secondary-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.worker-card:hover{
+    transform: translateY(-5px);
+}
+
+.worker-photo{
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.worker-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.worker-name{
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.worker-experience{
+    color: #777;
+    font-size: 14px;
+}
+
+.accept-btn{
+    display: inline-block;
+    padding: 10px 25px;
+    margin-top: 15px;
+    background: var(--primary-bg);
+    color: var(--primary-text);
+    border: 2px solid var(--primary-text);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.accept-btn:hover{
+    background: var(--primary-text);
+    color: var(--primary-bg);
+}
+.book-now-btn{
+    background-color: #000;   /* black background */
+    color: #fff;              /* white text */
+    padding: 12px 24px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.book-now-btn:hover{
+    background-color: #fff;
+    color: #000;
+}
+
+/* Tablet */
+@media (max-width: 768px){
+    .book-now-btn{
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px){
+    .book-now-btn{
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+}
+.form-row{
+    display:flex;
+    gap:15px;
+}
+
+.form-group{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+input[type="date"],
+.time-input{
+    width:100%;
+}
+
+/* time + ampm wrapper */
+.time-input{
+    display:flex;
+    border:1px solid #ccc;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.time-input input{
+    flex:3;
+    border:none;
+    padding:8px;
+}
+
+.time-input select{
+    flex:1;
+    border:none;
+    border-left:1px solid #ccc;
+    padding:8px;
+    background:white;
+}
+
+/* remove focus outline */
+.time-input input:focus,
+.time-input select:focus{
+    outline:none;
+}
+
+/* mobile responsive */
+@media (max-width:600px){
+
+    .form-row{
+        flex-direction:column;
+    }
+
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+   {% include "nav.html" %}
+    <!-- Service Details Section -->
+    <section class="service-section">
+        <div class="service-container">
+            <!-- Left Side: Service Image -->
+            <div class="service-image-wrapper">
+                <img class="service-image" src="{{ service.image.url }}" alt="{{ service.name }}">
+                {% comment %} <div class="service-image" id="serviceImage"></div> {% endcomment %}
+            </div>
+
+            <!-- Right Side: Service Details -->
+            {% comment %} <div class="service-details">
+                <div class="service-selector">
+                    <label for="serviceDropdown">Select Service:</label>
+                    <select id="serviceDropdown" class="service-dropdown">
+                        <option value="electrician">Electrician Service</option>
+                        <option value="plumber">Plumber Service</option>
+                        <option value="ac">AC Repair</option>
+                        <option value="cleaning">Cleaning Service</option>
+                    </select>
+                </div> {% endcomment %}
+                 <div class="service-details">
+                <div class="service-selector">
+                 <label for="serviceDropdown">Select Service:</label>
+                <select id="serviceDropdown" class="service-dropdown"
+        onchange="window.location.href=this.value">
+
+    {% for s in services %}
+        <option value="{% url 'book_with_id' s.id %}"
+                {% if s.id == service.id %}selected{% endif %}>
+            {{ s.name }}
+        </option>
+    {% endfor %}
+
+</select>
+</div>
+           
+                <h2 class="service-title" id="{{ service.id }}">{{service.name}}</h2>
+                <p class="service-description" id="serviceDescription">
+                    {{service.description}}
+                </p>
+
+                <div class="service-price-section">
+                    <span class="price-label">Minimum Service Cost:</span>
+                    <h3 class="service-price" id="servicePrice">₹{{service.minimum_price}}</h3>
+                </div>
+            
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section class="booking-section">
+        <div class="booking-container">
+            <h2 class="booking-title">Book This Service</h2>
+
+            <form  method="POST" id="bookingForm" class="booking-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="full_name" required>
+                    <span class="error-message" id="fullNameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobileNumber">Mobile Number *</label>
+                    <input type="tel" id="mobileNumber" name="mobile" placeholder="10-digit number" required>
+                    <span class="error-message" id="mobileError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <input type="text" id="address" name="address" required>
+                    <span class="error-message" id="addressError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceSelect">Select Service *</label>
+                      <select id="serviceSelect" name="service"
+                              onchange="window.location.href=this.value">
+
+                               {% for s in services %}
+                                <option value="{% url 'book_with_id' s.id %}"
+                                    {% if s.id == service.id %}selected{% endif %}>
+                             {{ s.name }}
+                                 </option>
+                              {% endfor %}
+
+                     </select>
+                </div>
+
+                
+
+                <div class="form-group">
+                    <label for="problemImage">Upload Problem Image</label>
+                    <input type="file" id="problemImage" name="problem_image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="problemDescription">Problem Description *</label>
+                    <textarea id="problemDescription" name="problem_description"  rows="4" required></textarea>
+                    <span class="error-message" id="descriptionError"></span>
+                </div>
+
+                <div class="form-row">
+
+    <div class="form-group">
+        <label for="preferredDate">Preferred Date *</label>
+        <input type="date" id="preferredDate" name="preferred_date" min="{{ today }}" required>
+        <span class="error-message" id="dateError"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="preferredTime">Preferred Time *</label>
+
+        <div class="time-input">
+            <input type="time" id="preferredTime" name="preferred_time" required>
+
+            <select name="time_period" class="ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+
+        <span class="error-message" id="timeError"></span>
+    </div>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label for="minimumCost">Minimum Service Cost (Auto-filled)</label>
+                    <input type="text" id="minimumCost" value="₹{{ service.minimum_price }}" readonly>
+                </div>
+
+                <button type="submit" class="book-now-btn">Book Now</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Worker Preview Section -->
+    <section class="workers-section">
+        <div class="workers-container">
+            <h2 class="workers-title">Available Nearby Workers</h2>
+
+            <div class="workers-grid">
+                <!-- Worker Card 1 -->
+                 {% for worker in nearby_workers %}
+                <div class="worker-card">
+                    <div class="worker-photo">
+            <img src="{{ worker.photo.url }}"  alt="worker">
+        </div>
+                    <h3 class="worker-name"> {{ worker.user.full_name }}</h3>
+                    <p class="worker-experience"> {{ worker.experience }} years experience</p>
+                    {% comment %} <div class="worker-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-count">(245 reviews)</span>
+                    </div> {% endcomment %}
+                    <button class="accept-btn">View Profile</button>
+                </div>
+                {% empty %}
+        <p>No nearby workers available.</p>
+    {% endfor %}
+
+                {% comment %} <!-- Worker Card 2 -->
+                <div class="worker-card">
+                    <div class="worker-photo" style="background: linear-gradient(135deg, #444, #666);"></div>
+                    <h3 class="worker-name">Amit Sharma</h3>
+                    <p class="worker-experience">6 years experience</p>
+                    <div class="worker-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-count">(189 reviews)</span>
+                    </div>
+                    <button class="accept-btn">View Profile</button>
+                </div>
+
+                <!-- Worker Card 3 -->
+                <div class="worker-card">
+                    <div class="worker-photo" style="background: linear-gradient(135deg, #555, #777);"></div>
+                    <h3 class="worker-name">Vikram Singh</h3>
+                    <p class="worker-experience">10 years experience</p>
+                    <div class="worker-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-count">(312 reviews)</span>
+                    </div>
+                    <button class="accept-btn">View Profile</button>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% include "footer.html" %}
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <h2>Booking Successful!</h2>
+            <p>A nearby worker will contact you soon.</p>
+            <button class="modal-close-btn">Close</button>
+        </div>
+    </div>
+
+    <script src="{%static 'assets/js/book.js'%}"></script>
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>
+

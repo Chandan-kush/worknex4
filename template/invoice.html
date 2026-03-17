@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKNEX Invoice</title>
+    <link rel="stylesheet" href="{%static 'assets/css/invoice.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    {% include "nav.html" %}
+
+    <!-- MAIN INVOICE CONTAINER -->
+    <div class="invoice-container">
+        <div class="invoice">
+            <!-- INVOICE HEADER -->
+            <div class="invoice-header">
+                <div class="company-info">
+                    <h1 class="company-name">WORKNEX</h1>
+                    <p class="company-subtitle">Service Marketplace Platform</p>
+                    <p class="company-details">📍  98 shop complex ,Vijay Nagar , City Indore,State MP,India </p>
+                    <p class="company-details">✉️ Worknex@gmail.com</p>
+                    <p class="company-details">📱 +91 6263812412</p>
+                </div>
+                <div class="invoice-title-section">
+                    <h2 class="invoice-title">INVOICE</h2>
+                    <div class="invoice-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Invoice ID:</span>
+                            <span class="detail-value">INV-{{ bill.id }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Booking ID:</span>
+                            <span class="detail-value">BK-{{ booking.id }}</span>
+                        </div>
+                        <!-- <div class="detail-row">
+                            <span class="detail-label">Invoice Date:</span>
+                            <span class="detail-value">{{ bill.created_at }}</span>
+                        </div> -->
+                        <div class="detail-row">
+                            <span class="detail-label">Service Date:</span>
+                            <span class="detail-value">{{ bill.created_at }}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Payment Status:</span>
+                            <span class="detail-value"><span class="badge badge-paid">Paid</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUSTOMER & WORKER DETAILS -->
+            <div class="details-section">
+                <div class="customer-info">
+                    <h3 class="section-title">Customer Information</h3>
+                    <p class="info-label">Name: <span class="info-value">{{ booking.full_name }}</span></p>
+                    <p class="info-label">Phone: <span class="info-value">{{ booking.mobile }}</span></p>
+                    <!-- <p class="info-label">Email: <span class="info-value">john.smith@email.com</span></p> -->
+                    <p class="info-label">Address: <span class="info-value">{{ booking.address }}</span></p>
+                </div>
+                <div class="worker-info">
+                    <h3 class="section-title">Worker Information</h3>
+                    <p class="info-label">Name: <span class="info-value">{{ worker.full_name }}</span></p>
+                    <p class="info-label">Service Type: <span class="info-value">{{ bill.service_type }}</span></p>
+                    <p class="info-label">Phone: <span class="info-value">{{ worker.phone_number }}</span></p>
+                    <p class="info-label">Worker ID: <span class="info-value">WK-2024-0892</span></p>
+                </div>
+            </div>
+
+            <!-- SERVICE DETAILS TABLE -->
+            <div class="table-section">
+                <h3 class="section-title">Service Details</h3>
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ bill.service_type }}</td>
+                            <td>{{ booking.problem_description }}</td>
+                            <td>1</td>
+                            <td>₹{{ bill.service_charge }}</td>
+                            <td>₹{{ bill.service_charge }}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PARTS USED TABLE -->
+            <div class="table-section">
+                <h3 class="section-title">Parts Used</h3>
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ bill.parts_used }}</td>
+                            <td>1</td>
+                            <td>₹{{ bill.parts_charge }}</td>
+                            <td>₹{{ bill.parts_charge }}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PRICE SUMMARY -->
+            <div class="summary-section">
+                <div class="summary-item">
+                    <span class="summary-label">Subtotal:</span>
+                    <span class="summary-value">₹{{ subtotal }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Service Charges:</span>
+                    <span class="summary-value">₹{{ bill.service_charge }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Parts Charges:</span>
+                    <span class="summary-value">₹{{ bill.parts_charge }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Platform Fee:</span>
+                    <span class="summary-value">₹{{ platform_fee }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Tax (18%):</span>
+                    <span class="summary-value">₹{{ tax|floatformat:0 }}</span>
+                </div>
+                <div class="summary-item total">
+                    <span class="summary-label">Total Amount:</span>
+                    <span class="summary-value">₹{{ total|floatformat:0 }}</span>
+                </div>
+            </div>
+
+            <!-- NOTES SECTION -->
+            <div class="notes-section">
+                <h3 class="section-title">Notes / Instructions</h3>
+                <p class="notes-text">Thank you for choosing Worknex. We appreciate your business and trust. For any questions or support, please contact support@worknex.com or call +1 (555) 123-4567. Keep this invoice for your records.</p>
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+          <button onclick="downloadInvoice()" class="btn btn-primary">
+⬇️ Download Invoice
+</button>
+            <button class="btn btn-secondary">📤 Share Invoice</button>
+          <a href="https://wa.me/{{ booking.mobile }}?text=Your Worknex Invoice: {{ request.build_absolute_uri }}" 
+class="btn btn-secondary">
+📲 Share on WhatsApp
+</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2026 Worknex. All rights reserved.</p>
+    </footer>
+    <script>
+function downloadInvoice() {
+    window.print();
+}
+
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+  {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worknex - Parts Store</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/part.css'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+     <link rel="stylesheet" href="{%static 'assets/css/services.css'%}">
+    <style>
+    
+.nav-link {
+    text-decoration: none;
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.nav-link:hover {
+    color: #666;
+}
+.quantity-box {
+    margin: 10px 0;
+}
+
+.quantity-box input {
+    width: 70px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Add to cart button */
+.buy {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Hover effect */
+.buy:hover {
+    background-color: #333;
+}
+.checkout-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #000;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.checkout-btn:hover {
+    background-color: #333;
+}
+.remove-btn {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #ff4d4d;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #cc0000;
+}
+    </style>
+</head>
+<body>
+   
+    
+  {% include "nav.html" %}
+   
+    <main>
+        
+        <header class="page-header">
+            <h1>Worknex Parts Store</h1>
+            <p class="subtitle">Genuine service parts at the best price.</p>
+        </header>
+
+       
+        <section class="products-section">
+            <div class="products-grid">
+               
+                 {% for part in parts %}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ part.image.url }}" alt="{{part.name}}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{part.name}}</h3>
+                        <p class="product-category">{{part.service_type}}</p>
+                        <p class="product-description">{{part.description}}</p>
+                        <div class="product-footer">
+                            <span class="product-price">₹{{part.display_price}}</span>
+                        
+                            
+                                </div>
+                           <p class="bulk-info">
+        Bulk Price: ₹{{ part.bulk_price }} 
+        (Min {{ part.bulk_min_quantity }} pcs)
+    </p>
+
+    
+    <form method="POST" action="{% url 'add_to_cart' part.id %}">
+        {% csrf_token %}
+
+        <div class="quantity-box">
+            <input type="number" 
+                   name="quantity" 
+                   value="1" 
+                   min="1">
+        </div>
+        
+        <button type="submit" class="buy">
+            Add to Cart
+        </button>
+    </form>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+               
+            </div>
+        </section>
+    </main>
+
+    
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <button class="close-cart-btn" onclick="closeCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            {% if cart %}
+               {% for key, item in cart.items %}
+               <div class="cart-item">
+                <h4>{{item.name}}</h4>
+                 <p>₹{{ item.price }} × {{ item.quantity }}</p>
+                  <a href="{% url 'remove_from_cart' key %}" class="remove-btn">Remove</a>
+                </div>
+                {% endfor %}
+                {% else %}
+
+            <p class="empty-cart">Your cart is empty</p>
+            {% endif%}
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span >₹{{ total }}</span>
+           </div></span>
+            
+           <a href="{% url 'checkout' %}" class="checkout-btn">
+                Proceed to Checkout
+           </a>
+        </div>
+    </aside>
+
+   
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+   {% include "footer.html" %}
+
+    <script src="{%static 'assets/js/part.js'%}"></script>
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>

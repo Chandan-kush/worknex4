@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worknex - Book Trusted Home Services Instantly</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+     <link rel="stylesheet" href="{%static 'assets/css/services.css'%}">
+     <link rel="stylesheet" href="{% static 'assets/css/logo.css' %}">
+     
+</head>
+<body>
+    <div id="loader-container" class="loader-container">
+    <div class="loader-content">
+
+        <div class="logo">
+            <img src="{% static 'assets/img/logo2.svg' %}" class="logo-img">
+        </div>
+
+        <h1 class="logo-text">WORKNEX</h1>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <p class="loading-text">Loading...</p>
+
+    </div>
+</div>
+    <!-- ==================== NAVBAR ==================== -->
+    {% include "nav.html" %}
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero">
+        <div class="hero-left">
+            <h1>Book Trusted Home Services Instantly</h1>
+            <p>Connect with verified professionals for all your home service needs. Fast, reliable, and transparent.</p>
+            
+            <div class="services-grid">
+                {% for service in services %}
+                    <a href="{% url 'book_with_id' service.id %}" class="service-card">
+                        {{ service.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="hero-right">
+            <div class="image-placeholder">
+                <img src="{% static 'assets/img/ele1.jpeg' %}" alt="Home service professional">
+            </div>
+            <div class="image-placeholder">
+                <img src="{% static 'assets/img/pl2.jpeg' %}" alt="Electrician working">
+            </div>
+            <div class="image-placeholder image-large">
+                <img src="{% static 'assets/img/cr1.jpeg' %}" alt="Professional plumber">
+            </div>
+        </div>
+    </section>
+   
+<!-- ==================== IMAGE ADS SLIDER ==================== -->
+
+    <!-- ==================== HOW IT WORKS ==================== -->
+    <section class="how-it-works">
+        <div class="section-container">
+            <h2 class="section-title">How It Works</h2>
+            
+            <div class="how-it-works-grid">
+                <div class="how-card">
+                    <div class="how-icon">📋</div>
+                    <h3>Book Service</h3>
+                    <p>Select your service and preferred time. Transparent pricing with no hidden fees.</p>
+                </div>
+                
+                <div class="how-card">
+                    <div class="how-icon">✓</div>
+                    <h3>Get Assigned Worker</h3>
+                    <p>Get matched with a verified professional who specializes in your service.</p>
+                </div>
+                
+                <div class="how-card">
+                    <div class="how-icon">⚡</div>
+                    <h3>Get Work Done</h3>
+                    <p>Professional service delivered on time. Rate and review when complete.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MY BOOKINGS ==================== -->
+    
+    
+
+    <!-- ==================== WHY CHOOSE WORKNEX ==================== -->
+    <section class="why-choose">
+        <div class="section-container">
+            <h2 class="section-title">Why Choose Worknex</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3>Verified Workers</h3>
+                    <p>All professionals are thoroughly vetted and background checked.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Transparent Pricing</h3>
+                    <p>Know the cost upfront. No surprise fees or hidden charges ever.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Response</h3>
+                    <p>Get matched with available professionals quickly and efficiently.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Payments</h3>
+                    <p>Safe transactions with encryption and buyer protection guaranteed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    {% include "footer.html" %}
+    <script src="{% static 'assets/js/logo.js' %}"></script>
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>

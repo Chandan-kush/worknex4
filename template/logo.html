@@ -1,0 +1,48 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKNEX - Loading</title>
+    <link rel="stylesheet" href="{%static 'assets/css/logo.css'%}">
+</head>
+<body>
+    <div id="loader-container" class="loader-container">
+        <div class="loader-content">
+            <!-- WORKNEX Logo -->
+            <div class="logo">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Logo mark -->
+                    <g>
+                        <rect x="15" y="15" width="25" height="25" fill="#000" rx="3"/>
+                        <rect x="50" y="15" width="25" height="25" fill="#000" rx="3"/>
+                        <rect x="85" y="15" width="25" height="25" fill="#000" rx="3"/>
+                        
+                        <rect x="15" y="50" width="25" height="25" fill="#000" rx="3"/>
+                        <rect x="85" y="50" width="25" height="25" fill="#000" rx="3"/>
+                        
+                        <rect x="15" y="85" width="25" height="25" fill="#000" rx="3"/>
+                        <rect x="50" y="85" width="25" height="25" fill="#000" rx="3"/>
+                        <rect x="85" y="85" width="25" height="25" fill="#000" rx="3"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- Logo Text -->
+            <h1 class="logo-text">WORKNEX</h1>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+            
+            <!-- Loading Text -->
+            <p class="loading-text">Loading...</p>
+        </div>
+    </div>
+
+    <script src="{%static 'assets/js/logo.js'%}"></script>
+</body>
+</html>

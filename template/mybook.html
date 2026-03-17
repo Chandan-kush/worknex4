@@ -1,0 +1,123 @@
+ {% load static %}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - WORKNEX</title>
+    <link rel="stylesheet" href="{%static 'assets/css/mybook.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+     <link rel="stylesheet" href="{%static 'assets/css/services.css'%}">
+    <style>
+        .booking-card-image{
+    width:100%;
+    height:180px;
+    overflow:hidden;
+    border-radius:12px 12px 0 0;
+}
+
+.booking-card-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+     {% include "nav.html" %}
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">My Bookings</h1>
+            <p class="page-subtitle">Track all your service bookings and status.</p>
+        </div>
+
+        <!-- Bookings Section -->
+        <section class="bookings-section">
+            <!-- Booking Cards -->
+            <div class="bookings-grid">
+                <!-- Booking Card 1 -->
+                 {% for booking in bookings %}
+                <div class="booking-card">
+                    <div class="booking-card-image">
+                        {% if booking.service.image %}
+<img src="{{ booking.service.image.url }}" alt="service">
+
+{% else %}
+🔧
+{% endif %}
+                    </div>
+                    <div class="booking-card-content">
+                        <div class="booking-header">
+                            <div>
+                                <h3 class="service-name">{{ booking.service.name }}</h3>
+                                <p class="worker-name">{% if booking.assigned_worker %}
+{{ booking.assigned_worker.full_name }}
+{% else %}
+Worker Not Assigned
+{% endif %}</p>
+                            </div>
+                            <span class="status-badge {{ booking.status }}">{{ booking.status }}</span>
+                        </div>
+                        <div class="booking-details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label"> Date</span>
+                                <span class="detail-value">{{ booking.preferred_date }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label"> Time</span>
+                                <span class="detail-value">{{ booking.preferred_time }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">📍 Location</span>
+                                <span class="detail-value">{{ booking.address }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">💰 Price</span>
+                                <span class="detail-value">₹{{ booking.minimum_cost }}</span>
+                            </div>
+                        </div>
+                        <div class="booking-meta">
+                            <span class="booking-id">ID: #{{ booking.id }}</span>
+                            <span class="payment-status">💳 Paid</span>
+                        </div>
+                        <div class="booking-actions">
+                           <button class="btn btn-primary"
+onclick="window.location.href='{% url "confirmation" booking.id %}'">
+View Details
+</button>
+                           <button class="btn btn-secondary"
+onclick="window.location.href='{% url 'chat' booking.id %}'">
+Chat
+</button>
+                           <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+{% csrf_token %}
+<button class="btn btn-tertiary">
+Cancel
+</button>
+</form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {% include "footer.html" %}
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>

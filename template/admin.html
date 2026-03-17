@@ -1,0 +1,847 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Service Marketplace</title>
+    <link rel="stylesheet" href="{%static 'assets/css/admin.css'%}">
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">📊 Admin Panel</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#users" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Users</span>
+                </a>
+                <a href="#workers" class="nav-item">
+                    <span class="nav-icon">🔧</span>
+                    <span class="nav-text">Workers</span>
+                </a>
+                <a href="#services" class="nav-item">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-text">Services</span>
+                </a>
+                <a href="#bookings" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">Bookings</span>
+                </a>
+                <a href="#bills" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Bills</span>
+                </a>
+                <a href="#payments" class="nav-item">
+                    <span class="nav-icon">💳</span>
+                    <span class="nav-text">Payments</span>
+                </a>
+                <a href="#parts" class="nav-item">
+                    <span class="nav-icon">🔩</span>
+                    <span class="nav-text">Parts</span>
+                </a>
+                <a href="#orders" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Orders</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#logout" class="nav-item logout">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard Overview</h1>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="notification-bell">
+                        🔔
+                        <span class="badge">3</span>
+                    </div>
+                    
+                    <div class="admin-profile">
+                        <img src="https://images.unsplash.com/photo-1633332755192-727a72b27451?w=100&h=100&fit=crop" alt="Admin" class="profile-image">
+                        <div class="profile-info">
+                            <div class="profile-name">Alex Johnson</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                        <div class="dropdown-icon">▼</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- SECTION 1: Dashboard Overview -->
+                <section id="dashboard" class="section">
+                    <h2 class="section-title">Dashboard Overview</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-value">2,847</div>
+                                <div class="stat-change positive">+12.5% from last month</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">🔧</div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total Workers</div>
+                                <div class="stat-value">543</div>
+                                <div class="stat-change positive">+8.2% from last month</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-content">
+                                <div class="stat-label">Active Bookings</div>
+                                <div class="stat-value">156</div>
+                                <div class="stat-change neutral">2 pending approvals</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-content">
+                                <div class="stat-label">Total Revenue</div>
+                                <div class="stat-value">$487,520</div>
+                                <div class="stat-change positive">+24.3% from last month</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Users Management -->
+                <section id="users" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Users Management</h2>
+                        <button class="btn btn-primary">+ Add User</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                             {% for user in users %}
+                                <tr>
+                                    <td>{{user.id}}</td>
+                                    <td>
+                                        <div class="user-cell">
+                                            {% comment %} <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop" alt="User"> {% endcomment %}
+                                            <span>{{user.full_name}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{user.phone_number}}</td>
+                                    <td><span class="badge-role">{{user.role}}</span></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    {% comment %} <td>#U002</td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop" alt="User">
+                                            <span>Michael Chen</span>
+                                        </div>
+                                    </td>
+                                    <td>+1 (555) 234-5678</td>
+                                    <td><span class="badge-role">Customer</span></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#U003</td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop" alt="User">
+                                            <span>Emily Rodriguez</span>
+                                        </div>
+                                    </td>
+                                    <td>+1 (555) 345-6789</td>
+                                    <td><span class="badge-role">Customer</span></td>
+                                    <td><span class="badge inactive">Inactive</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#U004</td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop" alt="User">
+                                            <span>James Patterson</span>
+                                        </div>
+                                    </td>
+                                    <td>+1 (555) 456-7890</td>
+                                    <td><span class="badge-role">Customer</span></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#U005</td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1517849845537-1d51a20414de?w=40&h=40&fit=crop" alt="User">
+                                            <span>Jessica Williams</span>
+                                        </div>
+                                    </td>
+                                    <td>+1 (555) 567-8901</td>
+                                    <td><span class="badge-role">Customer</span></td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr> {% endcomment %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Workers Management -->
+                <section id="workers" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Workers Management</h2>
+                        <button class="btn btn-primary">+ Add Worker</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Service Type</th>
+                                    <th>Experience</th>
+                                    <th>Location</th>
+                                    <th>Approval Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop" alt="Worker">
+                                            <span>David Martinez</span>
+                                        </div>
+                                    </td>
+                                    <td>Plumbing</td>
+                                    <td>8 years</td>
+                                    <td>New York, NY</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop" alt="Worker">
+                                            <span>Robert Kumar</span>
+                                        </div>
+                                    </td>
+                                    <td>Electrical</td>
+                                    <td>12 years</td>
+                                    <td>Los Angeles, CA</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop" alt="Worker">
+                                            <span>Amanda Foster</span>
+                                        </div>
+                                    </td>
+                                    <td>HVAC</td>
+                                    <td>6 years</td>
+                                    <td>Chicago, IL</td>
+                                    <td><span class="badge pending">Pending</span></td>
+                                    <td><button class="btn-action">Review</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop" alt="Worker">
+                                            <span>Christopher Lee</span>
+                                        </div>
+                                    </td>
+                                    <td>Carpentry</td>
+                                    <td>15 years</td>
+                                    <td>Miami, FL</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Edit</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: Services Management -->
+                <section id="services" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Services Management</h2>
+                        <button class="btn btn-primary">+ Add Service</button>
+                    </div>
+
+                    <div class="grid-container">
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=300&h=200&fit=crop" alt="Plumbing">
+                            <div class="card-content">
+                                <h3>Plumbing Services</h3>
+                                <p class="service-price">Min. $50</p>
+                                <div class="card-footer">
+                                    <span class="badge active">Active</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1574398890072-e9e2978e9a78?w=300&h=200&fit=crop" alt="Electrical">
+                            <div class="card-content">
+                                <h3>Electrical Repair</h3>
+                                <p class="service-price">Min. $75</p>
+                                <div class="card-footer">
+                                    <span class="badge active">Active</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" alt="HVAC">
+                            <div class="card-content">
+                                <h3>HVAC Maintenance</h3>
+                                <p class="service-price">Min. $100</p>
+                                <div class="card-footer">
+                                    <span class="badge active">Active</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1633451645053-09ac3e10fd58?w=300&h=200&fit=crop" alt="Carpentry">
+                            <div class="card-content">
+                                <h3>Carpentry Work</h3>
+                                <p class="service-price">Min. $60</p>
+                                <div class="card-footer">
+                                    <span class="badge inactive">Inactive</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1581578731548-c64695c952952?w=300&h=200&fit=crop" alt="Cleaning">
+                            <div class="card-content">
+                                <h3>Home Cleaning</h3>
+                                <p class="service-price">Min. $40</p>
+                                <div class="card-footer">
+                                    <span class="badge active">Active</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1586578947529-c1efb0193881?w=300&h=200&fit=crop" alt="Painting">
+                            <div class="card-content">
+                                <h3>Interior Painting</h3>
+                                <p class="service-price">Min. $80</p>
+                                <div class="card-footer">
+                                    <span class="badge active">Active</span>
+                                    <button class="btn-action">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: Bookings Management -->
+                <section id="bookings" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Bookings Management</h2>
+                        <button class="btn btn-primary">+ New Booking</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>User</th>
+                                    <th>Worker</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#BK001</td>
+                                    <td>Sarah Anderson</td>
+                                    <td>David Martinez</td>
+                                    <td>Plumbing Services</td>
+                                    <td>Feb 28, 2024</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK002</td>
+                                    <td>Michael Chen</td>
+                                    <td>Robert Kumar</td>
+                                    <td>Electrical Repair</td>
+                                    <td>Mar 01, 2024</td>
+                                    <td><span class="badge status-inprogress">In Progress</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK003</td>
+                                    <td>Emily Rodriguez</td>
+                                    <td>Christopher Lee</td>
+                                    <td>Carpentry Work</td>
+                                    <td>Mar 02, 2024</td>
+                                    <td><span class="badge status-pending">Pending</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK004</td>
+                                    <td>James Patterson</td>
+                                    <td>David Martinez</td>
+                                    <td>Plumbing Services</td>
+                                    <td>Feb 25, 2024</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK005</td>
+                                    <td>Jessica Williams</td>
+                                    <td>Amanda Foster</td>
+                                    <td>HVAC Maintenance</td>
+                                    <td>Mar 03, 2024</td>
+                                    <td><span class="badge status-inprogress">In Progress</span></td>
+                                    <td><button class="btn-action">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: Bills Management -->
+                <section id="bills" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Bills Management</h2>
+                        <button class="btn btn-primary">+ Create Bill</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Service Charge</th>
+                                    <th>Parts Charge</th>
+                                    <th>Total Amount</th>
+                                    <th>Approved</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#BK001</td>
+                                    <td>$150.00</td>
+                                    <td>$45.50</td>
+                                    <td>$195.50</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Download</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK002</td>
+                                    <td>$200.00</td>
+                                    <td>$120.00</td>
+                                    <td>$320.00</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Download</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK003</td>
+                                    <td>$175.00</td>
+                                    <td>$280.50</td>
+                                    <td>$455.50</td>
+                                    <td><span class="badge pending">Pending</span></td>
+                                    <td><button class="btn-action">Review</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK004</td>
+                                    <td>$150.00</td>
+                                    <td>$32.00</td>
+                                    <td>$182.00</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Download</button></td>
+                                </tr>
+                                <tr>
+                                    <td>#BK005</td>
+                                    <td>$250.00</td>
+                                    <td>$165.75</td>
+                                    <td>$415.75</td>
+                                    <td><span class="badge approved">Approved</span></td>
+                                    <td><button class="btn-action">Download</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 7: Payments Management -->
+                <section id="payments" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Payments Management</h2>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booking</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Status</th>
+                                    <th>Transaction ID</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#BK001</td>
+                                    <td>$195.50</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td>TXN-2024-001847</td>
+                                    <td>Feb 28, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>#BK002</td>
+                                    <td>$320.00</td>
+                                    <td>Apple Pay</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td>TXN-2024-001848</td>
+                                    <td>Mar 01, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>#BK003</td>
+                                    <td>$455.50</td>
+                                    <td>Bank Transfer</td>
+                                    <td><span class="badge status-pending">Pending</span></td>
+                                    <td>TXN-2024-001849</td>
+                                    <td>Mar 02, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>#BK004</td>
+                                    <td>$182.00</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td>TXN-2024-001850</td>
+                                    <td>Feb 25, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>#BK005</td>
+                                    <td>$415.75</td>
+                                    <td>Google Pay</td>
+                                    <td><span class="badge status-completed">Completed</span></td>
+                                    <td>TXN-2024-001851</td>
+                                    <td>Mar 03, 2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 8: Parts Management -->
+                <section id="parts" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Parts Management</h2>
+                        <button class="btn btn-primary">+ Add Part</button>
+                    </div>
+
+                    <div class="grid-container">
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1565197407303-f57e2ff4f1f3?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>Copper Pipe (1 inch)</h3>
+                                <p class="parts-type">Service: Plumbing</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$12.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$10.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$9.00</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>Electrical Wire (50ft)</h3>
+                                <p class="parts-type">Service: Electrical</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$24.99</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$21.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$18.75</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>AC Filter (16x25x1)</h3>
+                                <p class="parts-type">Service: HVAC</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$15.99</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$13.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$11.99</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1626407261206-96d1d8d41c42?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>Wood Stain (Gallon)</h3>
+                                <p class="parts-type">Service: Carpentry</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$35.00</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$31.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$28.00</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>Paint (Gallon)</h3>
+                                <p class="parts-type">Service: Painting</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$45.00</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$40.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$36.00</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="parts-card">
+                            <img src="https://images.unsplash.com/photo-1585432958197-d5f5e89c1844?w=300&h=200&fit=crop" alt="Part">
+                            <div class="card-content">
+                                <h3>Cleaning Supplies Kit</h3>
+                                <p class="parts-type">Service: Cleaning</p>
+                                <div class="pricing-grid">
+                                    <div class="price-item">
+                                        <span class="price-label">Normal:</span>
+                                        <span class="price-value">$22.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Worker:</span>
+                                        <span class="price-value">$19.50</span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Bulk:</span>
+                                        <span class="price-value">$17.00</span>
+                                    </div>
+                                </div>
+                                <button class="btn-action">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 9: Orders Management -->
+                <section id="orders" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Orders Management</h2>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                    <th>Grand Total</th>
+                                    <th>Payment Method</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sarah Anderson</td>
+                                    <td>+1 (555) 123-4567</td>
+                                    <td>New York, NY</td>
+                                    <td>$287.50</td>
+                                    <td>Credit Card</td>
+                                    <td>Feb 28, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Michael Chen</td>
+                                    <td>+1 (555) 234-5678</td>
+                                    <td>Los Angeles, CA</td>
+                                    <td>$456.75</td>
+                                    <td>Apple Pay</td>
+                                    <td>Feb 27, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Emily Rodriguez</td>
+                                    <td>+1 (555) 345-6789</td>
+                                    <td>Chicago, IL</td>
+                                    <td>$623.20</td>
+                                    <td>Bank Transfer</td>
+                                    <td>Feb 26, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>James Patterson</td>
+                                    <td>+1 (555) 456-7890</td>
+                                    <td>Miami, FL</td>
+                                    <td>$341.00</td>
+                                    <td>Credit Card</td>
+                                    <td>Feb 25, 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>Jessica Williams</td>
+                                    <td>+1 (555) 567-8901</td>
+                                    <td>Seattle, WA</td>
+                                    <td>$512.40</td>
+                                    <td>Google Pay</td>
+                                    <td>Feb 24, 2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const navItems = document.querySelectorAll(".nav-item");
+    const sections = document.querySelectorAll(".section");
+    const pageTitle = document.getElementById("page-title");
+
+    navItems.forEach(item => {
+        item.addEventListener("click", function (e) {
+
+            e.preventDefault();
+
+            // remove active class
+            navItems.forEach(nav => nav.classList.remove("active"));
+
+            // add active class
+            this.classList.add("active");
+
+            // get section id
+            const target = this.getAttribute("href").substring(1);
+
+            // hide all sections
+            sections.forEach(section => {
+                section.style.display = "none";
+            });
+
+            // show selected section
+            const activeSection = document.getElementById(target);
+            if (activeSection) {
+                activeSection.style.display = "block";
+            }
+
+            // change page title
+            pageTitle.innerText = this.innerText.trim();
+
+        });
+    });
+
+    // show dashboard by default
+    sections.forEach(section => section.style.display = "none");
+    document.getElementById("dashboard").style.display = "block";
+
+});
+
+</script>
+</body>
+</html>

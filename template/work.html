@@ -1,0 +1,771 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKNEX - Worker Dashboard</title>
+    <link rel="stylesheet" href="{%static 'assets/css/work.css'%}">
+     <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <style>
+        .jobs-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:20px;
+}
+
+.job-card{
+    background:#ffffff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.job-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.job-header h3{
+    font-size:18px;
+    font-weight:600;
+}
+
+.job-status{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.status-accepted{
+    background:#dbeafe;
+    color:#1e40af;
+}
+
+.status-onway{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.status-completed{
+    background:#d1fae5;
+    color:#065f46;
+}
+
+.job-actions{
+    margin-top:15px;
+    display:flex;
+    gap:10px;
+}
+
+.btn-primary{
+    background:#000;
+    color:#fff;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.btn-danger{
+    background:#dc3545;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.btn-secondary{
+    background:#6c757d;
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+}
+        .cart-container{
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.cart-items{
+    flex: 3;
+}
+
+.cart-summary{
+    flex: 1;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    height: fit-content;
+}
+
+.cart-summary span{
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.cart-summary .btn-primary{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.cart-summary .btn-primary:hover{
+    background:#333;
+}
+        .content-section{
+display:none;
+}
+
+.content-section.active{
+display:block;
+}
+        .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background-color: var(--white-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 15px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.product-image {
+    font-size: 60px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+.product-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.product-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+
+.product-pricing {
+    margin: 12px 0;
+}
+
+.original-price {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.worker-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.bulk-info {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.product-card input {
+    width: 70px;
+    padding: 8px;
+    margin: 15px auto;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-align: center;
+    display: block;
+}
+
+.product-card .btn-primary {
+    width: 100%;
+    margin-top: 10px;
+}
+.action-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.action-btn{
+    display:inline-block;
+    padding:8px 16px;
+    border:1px solid #000;
+    background:#fff;
+    color:#000;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:14px;
+    font-weight:500;
+    transition:0.2s;
+}
+
+.action-btn:hover{
+    background:#000;
+    color:#fff;
+}
+
+/* Mobile responsive */
+@media (max-width:768px){
+
+    .action-buttons{
+        flex-direction:column;
+    }
+
+    .action-btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
+.problem-img{
+    width:60px;
+    height:60px;
+    object-fit:cover;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.problem-img:hover{
+    transform:scale(1.1);
+}
+
+/* modal */
+
+.image-modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.image-modal img{
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+}
+
+/* mobile responsive */
+
+@media (max-width:768px){
+
+.image-modal img{
+    max-width:95%;
+}
+
+}
+    </style>
+</head>
+<body>
+     <div class="menu-toggle">☰</div>
+    <div class="container">
+        <!-- Left Sidebar -->
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">WORKNEX</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="booking">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Booking Requests</span>
+                </a>
+                <a href="#" class="nav-item" data-section="jobs">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Today's Jobs</span>
+                </a>
+                <a href="#" class="nav-item" data-section="billing">
+                    <span class="nav-icon">💳</span>
+                    <span class="nav-text">Billing</span>
+                </a>
+                <a href="#" class="nav-item" data-section="parts">
+                    <span class="nav-icon">🛠️</span>
+                    <span class="nav-text">Parts Store</span>
+                </a>
+                <a href="#" class="nav-item" data-section="cart">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">Cart</span>
+                </a>
+                <a href="#" class="nav-item" data-section="earnings">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Earnings</span>
+                </a>
+                <a href="#" class="nav-item" data-section="profile">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Profile</span>
+                </a>
+                <a href="#" class="nav-item logout" data-section="logout">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                </div>
+                <div class="cards-grid">
+                    <div class="summary-card">
+                        <div class="card-icon">📥</div>
+                        <div class="card-content">
+                            <p class="card-label">Total Requests Today</p>
+                            <p class="card-value">{{ total_requests_today }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">✅</div>
+                        <div class="card-content">
+                            <p class="card-label">Accepted Jobs</p>
+                            <p class="card-value">{{ accepted_jobs }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-content">
+                            <p class="card-label">Completed Jobs</p>
+                            <p class="card-value">{{ completed_jobs }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">💵</div>
+                        <div class="card-content">
+                            <p class="card-label">Total Earnings</p>
+                            <p class="card-value">₹{{ total_earnings }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Booking Requests Section -->
+            <section id="booking" class="content-section">
+                <div class="section-header">
+                    <h2>Booking Requests</h2>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer Name</th>
+                                <th>Service</th>
+                                <th>Problem Description</th>
+                                <th>Image</th>
+                                <th>Address</th>
+                                <th>Preferred Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+{% for booking in bookings %}
+<tr>
+
+<td>#BK{{ booking.id }}</td>
+<td>{{ booking.full_name }}</td>
+<td>{{ booking.service.name }}</td>
+<td>{{ booking.problem_description }}</td>
+
+<td>
+{% if booking.problem_image %}
+<img src="{{ booking.problem_image.url }} " onclick="openImage(this.src)" width="60">
+{% else %}
+No Image
+{% endif %}
+</td>
+<td>{{ booking.address }}</td>
+<td>{{ booking.preferred_time }}</td>
+
+<td>
+
+<div class="action-buttons">
+
+<a href="{% url 'accept_booking' booking.id %}" class="action-btn">
+Accept
+</a>
+
+<a href="{% url 'reject_booking' booking.id %}" class="action-btn">
+Reject
+</a>
+
+</div>
+
+</td>
+
+</tr>
+{% empty %}
+    <tr>
+        <td colspan="6" style="text-align:center;">
+            No booking requests available
+        </td>
+    </tr>
+{% endfor %}
+
+</tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Today's Jobs Section -->
+            <section id="jobs" class="content-section">
+                <div class="section-header">
+                    <h2>Today's Jobs</h2>
+                </div>
+                <div class="jobs-grid">
+                    {% for job in today_jobs %}
+
+<div class="job-card">
+
+<div class="job-header">
+<h3>{{ job.full_name }}</h3>
+
+{% if job.status == "accepted" %}
+<span class="job-status status-accepted">Accepted</span>
+
+{% elif job.status == "on_the_way" %}
+<span class="job-status status-onway">On The Way</span>
+
+{% elif job.status == "completed" %}
+<span class="job-status status-completed">Completed</span>
+<a href="{% url 'invoice' job.id %}" class="btn-secondary">View Invoice</a>
+{% endif %}
+
+</div>
+
+<div class="job-details">
+<p><strong>Service:</strong> {{ job.service.name }}</p>
+<p><strong>Address:</strong> {{ job.address }}</p>
+<p><strong>Contact:</strong> {{ job.mobile }}</p>
+</div>
+
+<div class="job-actions">
+<a href="{% url 'chat' job.id %}" class="btn-primary">Chat with Customer</a>
+<a href="{% url 'delete_job' job.id %}" class="btn-danger">
+Delete
+</a>
+</div>
+
+</div>
+
+{% endfor %}
+                </div>
+            </section>
+
+            <!-- Billing Section -->
+            <section id="billing" class="content-section">
+                <div class="section-header">
+                    <h2>Generate Bill</h2>
+                </div>
+                <div class="form-container">
+                    <form method="POST" action="{% url 'work' %}" class="billing-form">
+
+                         {% csrf_token %}
+                         <input type="hidden" name="form_type" value="bill">
+                        <div class="form-group">
+                            <label for="booking-select">Select Booking</label>
+                            <select id="booking-select" name="booking">
+                                <option>Choose a booking...</option>
+                                {% for booking in accepted_bookings %}
+<option value="{{ booking.id }}">
+BK{{ booking.id }} - {{ booking.full_name }}
+</option>
+{% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-type">Service Type</label>
+                            <input type="text" name="service_type" placeholder="e.g., Plumbing Repair" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-charge">Service Charge ($)</label>
+                            <input type="number" id="service-charge" name="service_charge" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parts-used">Parts Used</label>
+                            <textarea id="parts-used" name="parts_used" placeholder="List of parts used..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="parts-cost">Parts Cost ($)</label>
+                            <input type="number" id="parts-cost" name="parts_cost" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="total-amount">Total Amount ($)</label>
+                            <input type="number" id="total-amount" placeholder="0.00" readonly>
+                        </div>
+                        <button type="submit" class="btn-primary btn-large">Submit Bill</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Parts Store Section -->
+            <section id="parts" class="content-section">
+                <div class="section-header">
+                    <h2>Parts Store</h2>
+                </div>
+                <div class="products-grid">
+                    {% for part in parts %}
+
+<div class="product-card">
+
+<div class="product-image">
+<img src="{{ part.image.url }}">
+</div>
+
+<h3>{{ part.name }}</h3>
+
+                        <div class="product-pricing">
+                        <p class="original-price"><strike>₹{{ part.normal_price }}</strike></p>
+                        <p class="worker-price">₹{{ part.worker_price }}</p>
+                         </div>
+
+                            <p class="bulk-info">
+                           Bulk ₹{{ part.bulk_price }} ({{ part.bulk_min_quantity }}+)
+                            </p>
+
+                            <form method="POST" action="{% url 'add_to_cart' part.id %}">
+                             {% csrf_token %}
+                                 <input type="number" name="quantity" value="1" min="1">
+                              <button class="btn-primary">Add to Cart</button>
+                              </form>
+
+                          </div>
+
+                     {% endfor %}
+                </div>
+            </section>
+
+            <!-- Cart Section -->
+           <section id="cart" class="content-section">
+    <div class="section-header">
+        <h2>Shopping Cart</h2>
+    </div>
+
+    {% if cart %}
+
+    <div class="cart-container">
+        <div class="cart-items">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% for key, item in cart.items %}
+
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.price }}</td>
+                    <td>₹{{ total }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' key %}" class="btn-remove">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cart-summary">
+            <span><strong>Total Amount:</strong></span>
+            <span>₹{{ total }}</span>
+
+            <a href="{% url 'checkout' %}" class="btn-primary">
+                Proceed to Checkout
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+
+    <p>Your cart is empty.</p>
+
+    {% endif %}
+
+</section>
+
+            <!-- Earnings Section -->
+            <section id="earnings" class="content-section">
+                <div class="section-header">
+                    <h2>Earnings</h2>
+                </div>
+                <div class="earnings-grid">
+                    <div class="earnings-card">
+                        <div class="earnings-label">Today's Earnings</div>
+                        <div class="earnings-amount">₹{{ today_earnings }}</div>
+                        <div class="earnings-info">Completed jobs: {{ today_completed_jobs }}</div>
+                    </div>
+                    <div class="earnings-card">
+                        <div class="earnings-label">Weekly Earnings</div>
+                        <div class="earnings-amount">₹{{ weekly_earnings }}</div>
+                        <div class="earnings-info">Completed jobs: {{ weekly_completed_jobs }}</div>
+                    </div>
+                    <div class="earnings-card">
+                        <div class="earnings-label">Monthly Earnings</div>
+                        <div class="earnings-amount">₹{{ monthly_earnings }}</div>
+                        <div class="earnings-info">Completed jobs: {{ monthly_completed_jobs }}</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="content-section ">
+                <div class="section-header">
+                    <h2>My Profile</h2>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-left">
+                        <div class="profile-card">
+                            <div class="profile-image-container">
+                               <img src="{{ worker.photo.url }}" class="profile-image">
+                            </div>
+                            <h3 class="profile-name">{{ worker.user.full_name }}</h3>
+                            <p class="profile-category">{{ worker.service_type.name }} Specialist</p>
+                            <div class="profile-info">
+                                <p><strong>Experience:</strong> {{ worker.experience }} years</p>
+                                <p><strong>Location:</strong> {{ worker.location }}</p>
+                                <div class="profile-rating">
+                                    <span>Rating: ⭐⭐⭐⭐⭐ 4.9/5</span>
+                                </div>
+                            </div>
+                            <button class="btn-secondary btn-large">Edit Profile</button>
+                        </div>
+                    </div>
+                    <div class="profile-right" >
+                        <form class="profile-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="profile">
+                            <div class="form-group">
+                                <label for="full-name">Full Name</label>
+                                <input type="text" id="full-name" name="full_name" value="{{ worker.user.full_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile">Mobile</label>
+                                <input type="tel" id="mobile" name="mobile" value="{{ worker.user.phone_number }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="{{ worker.user.email }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="experience">Experience (years)</label>
+                                <input type="number" id="experience" name="experience" value="{{ worker.experience }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="service-category">Service Type</label>
+                                <select name="service_category" required>
+                                    {% for service in services %}
+
+<option value="{{service.id}}"
+{% if worker.service_type.id == service.id %}selected{% endif %}>
+{{service.name}}
+</option>
+
+{% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" id="location"  name="location" value="{{ worker.location }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-photo">Upload Profile Photo</label>
+                                <input type="file" id="profile-photo" name="profile_photo" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label for="id-proof">Upload ID Proof</label>
+                                <input type="file" name="id_proof" id="id-proof" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn-primary btn-large">Save Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{%static 'assets/js/work.js'%}"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function(){
+
+const menuToggle = document.querySelector(".menu-toggle");
+const sidebar = document.querySelector(".sidebar");
+
+menuToggle.addEventListener("click", function(){
+sidebar.classList.toggle("active");
+});
+
+});
+function openImage(src){
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("modalImg");
+
+    img.src = src;
+    modal.style.display = "flex";
+}
+
+function closeImage(){
+    document.getElementById("imageModal").style.display = "none";
+}
+    </script>
+<div id="imageModal" class="image-modal" onclick="closeImage()">
+    <img id="modalImg">
+</div>
+
+</body>
+</html>

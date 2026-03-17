@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+
+<defs>
+<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#00c6ff"></stop>
+<stop offset="100%" stop-color="#0072ff"></stop>
+</linearGradient>
+
+<linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#00ff87"></stop>
+<stop offset="100%" stop-color="#60efff"></stop>
+</linearGradient>
+
+<linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#ff7a18"></stop>
+<stop offset="100%" stop-color="#ffb347"></stop>
+</linearGradient>
+
+<linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#ff0844"></stop>
+<stop offset="100%" stop-color="#ffb199"></stop>
+</linearGradient>
+</defs>
+
+<!-- Left Shape -->
+<path d="M150 250 C120 150 250 150 300 250 L350 350 C300 420 200 380 150 250" fill="url(#grad1)"></path>
+
+<!-- Middle Shape -->
+<path d="M300 250 C320 180 420 180 450 250 L500 350 C450 420 350 380 300 250" fill="url(#grad2)"></path>
+
+<!-- Right Shape -->
+<path d="M450 250 C500 150 630 180 650 250 L700 350 C630 420 520 380 450 250" fill="url(#grad3)"></path>
+
+<!-- Color circle accents -->
+<circle cx="220" cy="200" r="20" fill="#00bfff"></circle>
+<circle cx="580" cy="200" r="20" fill="#ff6600"></circle>
+<circle cx="400" cy="420" r="20" fill="#8a2be2"></circle>
+
+<!-- Text -->
+<text x="400" y="540" font-size="90" text-anchor="middle" font-family="Arial" fill="#0f2a4d" font-weight="bold">
+Worknex
+</text>
+
+</svg>

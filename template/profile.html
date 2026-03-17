@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Worknex</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/profile.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'assets/css/home.css'%}">
+     <link rel="stylesheet" href="{%static 'assets/css/services.css'%}">
+    
+</head>
+<body>
+     {% include "nav.html" %}
+
+    <main class="profile-container">
+        <div class="profile-wrapper">
+            <section class="profile-header">
+                <div class="profile-image-wrapper">
+                    {% if profile.photo %}
+                        <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-image">
+                    {% else %}
+                        <div class="profile-image placeholder"></div>
+                    {% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name">{{ user.full_name }}</h1>
+                    <p class="profile-role">{{ user.role }}</p>
+                    <p class="profile-contact">{{ user.phone_number }}</p>
+                    <p class="profile-contact">{{ user.email }}</p>
+                    {% comment %} <div class="status-badge {% if profile.is_approved %}approved{% else %}pending{% endif %}">
+                        {% if profile.is_approved %}Approved{% else %}Not Approved{% endif %}
+                    </div> {% endcomment %}
+                </div>
+            </section>
+
+            <section class="info-grid">
+                <div class="info-card">
+                    <h2 class="card-heading">Personal Information</h2>
+                    <form class="form-group">
+                        <div class="form-field">
+                            <label for="full-name">Full Name</label>
+                            <input type="text" id="full-name" value="{{ user.full_name }}" readonly class="form-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" value="{{ user.phone_number }}" readonly class="form-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="{{ user.email }}" readonly class="form-input">
+                        </div>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <!-- <div class="info-card">
+                    <h2 class="card-heading">Professional Information</h2>
+                    <div class="info-grid-2col">
+                        <div class="info-field">
+                            <label>Experience</label>
+                            <p class="info-value">{{ profile.experience }} years</p>
+                        </div>
+                        <div class="info-field">
+                            <label>Service Type</label>
+                            <p class="info-value">{{ profile.service_type.name }}</p>
+                        </div>
+                        <div class="info-field">
+                            <label>Location</label>
+                            <p class="info-value">{{ profile.location }}</p>
+                        </div>
+                        <div class="info-field">
+                            <label>Address</label>
+                            <p class="info-value">{{ profile.address }}</p>
+                        </div>
+                    </div>
+                </div> -->
+
+                {% comment %} <div class="info-card">
+                    <h2 class="card-heading">Documents</h2>
+                    <div class="documents-section">
+                        <div class="document-preview">
+                            <div class="preview-label">Profile Photo</div>
+                            <div class="preview-box">
+                                {% if profile.photo %}
+                                    <img src="{{ profile.photo.url }}" alt="Profile Photo" class="preview-image">
+                                {% else %}
+                                    <div class="preview-placeholder">No image</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="document-preview">
+                            <div class="preview-label">ID Proof</div>
+                            <div class="preview-box">
+                                {% if profile.id_proof %}
+                                    <img src="{{ profile.id_proof.url }}" alt="ID Proof" class="preview-image">
+                                {% else %}
+                                    <div class="preview-placeholder">No document</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <form class="upload-section" enctype="multipart/form-data">
+                        <div class="upload-box">
+                            <label for="photo-upload" class="upload-label">
+                                <span class="upload-text">Update Profile Photo</span>
+                                <input type="file" id="photo-upload" class="upload-input" accept="image/*">
+                            </label>
+                        </div>
+                        <div class="upload-box">
+                            <label for="id-upload" class="upload-label">
+                                <span class="upload-text">Update ID Proof</span>
+                                <input type="file" id="id-upload" class="upload-input" accept="image/*,.pdf">
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-primary">Save Documents</button>
+                    </form>
+                </div> {% endcomment %}
+            </section>
+        </div>
+    </main>
+
+   {% include "footer.html" %}
+    <script>
+
+const toggle = document.querySelector(".menu-toggle");
+const navRight = document.querySelector(".nav-right");
+
+toggle.addEventListener("click", () => {
+navRight.classList.toggle("active");
+});
+
+</script>
+</body>
+</html>

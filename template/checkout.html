@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Checkout - Your Store</title>
+    <link rel="icon" href="{%static 'assets/img/logo2.svg'%}">
+    <link rel="stylesheet" href="{%static 'assets/css/checkout.css'%}">
+    
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Checkout</h1>
+            <div class="header-nav">
+                <span>
+                    <span class="step-number active">1</span>
+                    Delivery
+                </span>
+                <span>
+                    <span class="step-number">2</span>
+                    Payment
+                </span>
+                <span>
+                    <span class="step-number">3</span>
+                    Confirmation
+                </span>
+            </div>
+        </div>
+
+        <!-- MAIN CHECKOUT -->
+        <div class="checkout-wrapper">
+            <!-- LEFT: FORM CONTENT -->
+             <form method="POST">
+                {% csrf_token %}
+            <div class="checkout-content">
+                <!-- SHIPPING INFORMATION -->
+                <div class="form-section">
+                    <h2>Address Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" placeholder="First Name"  name="first_name">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" placeholder="Last Name"  name="last_name">
+                        </div>
+                    </div>
+                    <div class="form-group form-row full">
+                        <div>
+                            <label>Email Address</label>
+                            <input type="email" placeholder="work@gmail.com"  name="email">
+                        </div>
+                    </div>
+                    <div class="form-group form-row full">
+                        <div>
+                            <label>Phone Number</label>
+                            <input type="tel" placeholder="Phone number" name="phone">
+                        </div>
+                    </div>
+                    <div class="form-group form-row full">
+                        <div>
+                            <label>Street Address</label>
+                            <input type="text" placeholder="123 Main Street" name="address">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" placeholder="Enter your city name" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" placeholder="Enter your state name" name="state">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>PIN Code</label>
+                            <input type="text" placeholder="410001" name="pincode">
+                        </div>
+                        <!-- <div class="form-group">
+                            <label>Country</label>
+                            <select>
+                                <option>United States</option>
+                                <option>Canada</option>
+                                <option>United Kingdom</option>
+                            </select>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- PAYMENT INFORMATION -->
+                <div class="form-section">
+                    <h2>Payment Method</h2>
+                    <div class="payment-methods">
+                        <!-- CARD PAYMENT -->
+                        <label class="payment-option active">
+                            <input type="radio" name="payment_method" value="card" checked>
+                            <div class="payment-label">
+                                <span class="title">Credit or Debit Card</span>
+                                <span class="description">Visa, Mastercard</span>
+                            </div>
+                            <span class="payment-icon">💳</span>
+                        </label>
+
+                        <!-- UPI PAYMENT -->
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="upi">
+                            <div class="payment-label">
+                                <span class="title">UPI Payment</span>
+                                <span class="description">Google Pay, PhonePe, BHIM</span>
+                            </div>
+                            <span class="payment-icon">📱</span>
+                        </label>
+
+                        <!-- CASH ON DELIVERY -->
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="cod" checked>
+                            <div class="payment-label">
+                                <span class="title">Cash on Delivery</span>
+                                <span class="description">Pay when your order arrives</span>
+                            </div>
+                            <span class="payment-icon">🚚</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- CARD DETAILS (shown when card selected) -->
+                <div class="form-section" id="cardDetails">
+                    <h2>Card Details</h2>
+                    <div class="form-group form-row full">
+                        <div>
+                            <label>Cardholder Name</label>
+                            <input type="text" placeholder="Enter your card name">
+                        </div>
+                    </div>
+                    <div class="form-group form-row full">
+                        <div>
+                            <label>Card Number</label>
+                            <input type="text" placeholder="1234 5678 9012 3456">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- RIGHT: ORDER SUMMARY -->
+            <aside class="order-summary">
+                <h3>Order Summary</h3>
+
+                <!-- CART ITEMS -->
+                <div class="cart-items">
+                    <!-- Item 1 -->
+                     {% for item in cart.values %}
+                    <div class="cart-item">
+                        <!-- <div class="item-image">👜</div> -->
+                        <div class="item-details">
+                            <div class="item-name">{{item.name}}</div>
+                            <div class="item-meta">Qty:{{item.quantity}}</div>
+                        </div>
+                        <div class="item-price"> ₹{{ item.price }}</div>
+                    </div>
+                 {% endfor %}
+                    <!-- Item 2 -->
+                    {% comment %} <div class="cart-item">
+                        <div class="item-image">⌚</div>
+                        <div class="item-details">
+                            <div class="item-name">Elegant Watch</div>
+                            <div class="item-meta">Color: Silver • Qty: 1</div>
+                        </div>
+                        <div class="item-price">$79.99</div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="cart-item">
+                        <div class="item-image">🧢</div>
+                        <div class="item-details">
+                            <div class="item-name">Casual Cap</div>
+                            <div class="item-meta">Color: Navy • Qty: 2</div>
+                        </div>
+                        <div class="item-price">$39.98</div>
+                    </div> {% endcomment %}
+                </div>
+
+                <!-- DISCOUNT CODE -->
+                <div class="discount-section" style="margin-bottom: 24px;">
+                    <input type="text" placeholder="Discount code">
+                    <button>Apply</button>
+                </div>
+
+                <!-- PRICING BREAKDOWN -->
+                <div class="pricing-breakdown">
+                    <div class="price-row subtotal">
+                        <label>Subtotal</label>
+                        <span class="price-value">₹{{ subtotal }}</span>
+                    </div>
+                    <div class="price-row">
+                        <label>Delivery Charges</label>
+                        <span class="price-value">₹{{ shipping }}</span>
+                    </div>
+                    <div class="price-row">
+                        <label>Tax</label>
+                        <span class="price-value">₹{{ tax|floatformat:2}}</span>
+                    </div>
+                    {% comment %} <div class="price-row discount" style="display: none;">
+                        <label>Discount</label>
+                        <span class="price-value">-</span>
+                    </div> {% endcomment %}
+                </div>
+
+                <!-- GRAND TOTAL -->
+                <div class="grand-total">
+                    <label>Grand Total</label>
+                    <span class="price-value">₹{{ grand_total }}</span>
+                </div>
+
+                <!-- CHECKOUT BUTTON -->
+                <button type="submit" class="checkout-btn">Complete Purchase</button>
+            </aside>
+            </form>
+        </div>
+    </div>
+
+    <script src="{%static 'assets/js/home.js'%}"></script>
+</body>
+</html>
