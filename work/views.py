@@ -119,7 +119,7 @@ def book_service(request, service_id):
         time = request.POST.get('preferred_time')
         period = request.POST.get('time_period')
         problem_image = request.FILES.get('problem_image')
-        final_time = datetime.strptime(f"{time} {period}", "%h:%M ").time()
+        final_time = datetime.strptime(f"{time} {period}", "%I:%M %p ").time()
         booking = Booking.objects.create(
             user=request.user,
             service=service,
